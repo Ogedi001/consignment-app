@@ -16,12 +16,12 @@ import {
 
 const slides = [
   {
-    title: "Best Logistics Service Provider",
+    title: "Best Logistics Service ",
     highlight: "Provider",
     text: "We are committed to providing our customers with exceptional service while offering our employees the best environment to grow and succeed.",
   },
   {
-    title: "Road Transport Express Delivery",
+    title: "Road Transport Express ",
     highlight: "Delivery",
     text: "Fast, reliable, and affordable transport solutions tailored to your needs.",
   },

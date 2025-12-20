@@ -7,6 +7,7 @@ import Experience from "@/components/Experience";
 import Education from "@/components/Education";
 import Footer from "@/components/Footer";
 import { siteConfig } from "@/configs/config";
+import LandingPage from "@/components/sections/features";
 //import "@/styles/global.css";
 
 const Page = () => {
@@ -32,12 +33,14 @@ const Page = () => {
 
       <Header />
       <main>
-        <Hero />
+        {/* <Hero /> */}
+        <LandingPage />
         {/* <About />
         <Projects />
         <Experience />
         <Education /> */}
       </main>
+
       <Footer />
     </>
   );
