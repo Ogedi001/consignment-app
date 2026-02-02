@@ -27,8 +27,8 @@ export function CTASection() {
 
           {/* Subtext */}
           <p className="mt-4 max-w-xl mx-auto text-muted-foreground text-lg">
-            Whether you're buying or selling, TrustFlow protects your money,
-            your goods, and your reputation — from start to finish.
+            Whether you&apos;re buying or selling, TrustFlow protects your
+            money, your goods, and your reputation — from start to finish.
           </p>
 
           {/* CTA */}
