@@ -1,200 +1,110 @@
-import React from "react";
-import { siteConfig } from "@/configs/config";
+"use client";
 
-const Footer: React.FC = () => {
-  const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
-  const hasExperience =
-    siteConfig.experience && siteConfig.experience.length > 0;
-  const hasEducation = siteConfig.education && siteConfig.education.length > 0;
+import Image from "next/image";
+import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 
+const productLinks = [
+  { href: "#features", label: "Features" },
+  { href: "#how-it-works", label: "How it works" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#trust", label: "Trust & Security" },
+];
+
+const companyLinks = [
+  { href: "#", label: "About" },
+  { href: "#", label: "Documentation" },
+  { href: "#", label: "Privacy" },
+  { href: "#", label: "Terms" },
+];
+
+const socialLinks = [
+  { href: "#", label: "Twitter", src: "/twitter.svg" },
+  { href: "#", label: "LinkedIn", src: "/linkedin.svg" },
+];
+
+export function Footer() {
   return (
-    <footer className="relative bg-gray-50 border-t border-gray-200">
-      <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          {/* Left section */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-2xl font-bold text-gray-800">
-              {siteConfig.name}
-            </h3>
-            <p className="text-base text-gray-600">{siteConfig.title}</p>
-
-            {/* Social links */}
-            <div className="flex gap-x-6">
-              <a
-                href={`mailto:${siteConfig.social.email}`}
-                aria-label="Email"
-                className="text-gray-600 transition-colors duration-300 hover:text-accent"
-              >
-                {/* Email Icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                  <path d="M3 7l9 6l9 -6" />
-                </svg>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href={siteConfig.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="text-gray-600 transition-colors duration-300 hover:text-accent"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M8 11v5" />
-                  <path d="M8 8v.01" />
-                  <path d="M12 16v-5" />
-                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
-                </svg>
-              </a>
-
-              {/* Twitter */}
-              <a
-                href={siteConfig.social.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="text-gray-600 transition-colors duration-300 hover:text-accent"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-                </svg>
-              </a>
-
-              {/* GitHub */}
-              <a
-                href={siteConfig.social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="text-gray-600 transition-colors duration-300 hover:text-accent"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-                </svg>
-              </a>
+    <footer className="border-t bg-background">
+      <div className="container mx-auto px-6 py-20 max-w-7xl">
+        {/* Top */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* Brand */}
+          <div className="flex flex-col gap-4 md:col-span-2">
+            <div className="flex items-center gap-2 text-lg font-semibold">
+              <ShieldCheck className="h-5 w-5 text-primary" />
+              TrustFlow
             </div>
+
+            <p className="max-w-sm text-sm text-muted-foreground">
+              Trust infrastructure for secure, high-value trade. Built to
+              protect buyers, sellers, and every step in between.
+            </p>
+
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} TrustFlow. All rights reserved.
+            </p>
           </div>
 
-          {/* Right section */}
-          <div className="hidden md:block flex flex-col md:items-end gap-4">
-            <nav className="flex gap-x-8">
-              <a
-                href="#about"
-                className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
+          {/* Product */}
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Product</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              {productLinks.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="hover:text-foreground">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Company</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              {companyLinks.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="hover:text-foreground">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="mt-16 border-t" />
+
+        {/* Bottom */}
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-xs text-muted-foreground text-center md:text-left">
+            Payments held in escrow. Funds released only after confirmed
+            completion.
+          </p>
+
+          {/* Socials */}
+          <div className="flex gap-4">
+            {socialLinks.map((social) => (
+              <Link
+                key={social.label}
+                href={social.href}
+                aria-label={social.label}
+                className="h-10 w-10 rounded-full border flex items-center justify-center hover:bg-muted transition"
               >
-                About
-              </a>
-              {hasProjects && (
-                <a
-                  href="#projects"
-                  className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Projects
-                </a>
-              )}
-              {hasExperience && (
-                <a
-                  href="#experience"
-                  className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Experience
-                </a>
-              )}
-              {hasEducation && (
-                <a
-                  href="#education"
-                  className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Education
-                </a>
-              )}
-            </nav>
-            <p className="text-sm text-gray-500">
-              © {new Date().getFullYear()} {siteConfig.name}. All rights
-              reserved.
-            </p>
+                <Image
+                  src={social.src}
+                  alt={social.label}
+                  width={24}
+                  height={24}
+                />
+              </Link>
+            ))}
           </div>
         </div>
       </div>
-
-      {/* Decorative SVG */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <svg
-          aria-hidden="true"
-          className="absolute bottom-0 left-0 w-full h-24 text-gray-100"
-        >
-          <pattern
-            id="footer-pattern"
-            x="0"
-            y="0"
-            width="100"
-            height="100"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M0 50 Q 25 40, 50 50 T 100 50"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              fill="none"
-              opacity="0.4"
-            />
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#footer-pattern)" />
-        </svg>
-      </div>
     </footer>
   );
-};
-
-export default Footer;
+}
