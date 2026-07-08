@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { NavLinks } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
+import { LogoLockup } from "./LogoLockup";
 
 const track = (event: string) => {
   console.log(event);
@@ -13,11 +14,9 @@ const track = (event: string) => {
 export function Navbar() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 border-b bg-background/80 backdrop-blur">
-      <div className="container mx-auto h-16 px-6 flex items-center justify-between">
+      <div className="container mx-auto h-20 px-8 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="font-bold text-lg">
-          TrustFlow
-        </Link>
+        <LogoLockup />
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-8">
