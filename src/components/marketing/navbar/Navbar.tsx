@@ -13,8 +13,8 @@ const track = (event: string) => {
 
 export function Navbar() {
   return (
-    <header className="fixed top-0 inset-x-0 z-50 border-b bg-background/80 backdrop-blur">
-      <div className="container mx-auto h-20 px-8 flex items-center justify-between">
+    <header className="fixed top-0 inset-x-0 z-50 border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+      <div className="container mx-auto flex h-20 items-center justify-between px-6 md:px-10">
         {/* Logo */}
         <LogoLockup />
 
@@ -40,7 +40,11 @@ export function Navbar() {
             </Link>
           </Button>
 
-          <Button size="sm" onClick={() => track("nav_get_started")}>
+          <Button
+            size="sm"
+            variant="gradient"
+            onClick={() => track("nav_get_started")}
+          >
             Get Started
           </Button>
         </div>

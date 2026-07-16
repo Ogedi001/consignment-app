@@ -21,13 +21,16 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <div className="mt-16 grid md:grid-cols-3 gap-8">
+    <div className="mt-16 grid gap-6 md:grid-cols-3">
       {testimonials.map((item, index) => (
-        <div key={index} className="rounded-xl border bg-card p-6 text-left">
-          <p className="text-muted-foreground">“{item.quote}”</p>
+        <div
+          key={index}
+          className="rounded-xl border border-border bg-card p-6 text-left shadow-sm"
+        >
+          <p className="leading-relaxed text-muted-foreground">“{item.quote}”</p>
 
           <div className="mt-4">
-            <p className="font-semibold">{item.name}</p>
+            <p className="font-semibold text-foreground">{item.name}</p>
             <p className="text-sm text-muted-foreground">{item.role}</p>
           </div>
         </div>

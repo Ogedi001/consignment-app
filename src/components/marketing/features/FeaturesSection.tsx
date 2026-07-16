@@ -44,26 +44,24 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="md:px-20 py-20 ">
+    <section id="features" className="bg-background py-24 md:px-20">
       <div className="container mx-auto px-6">
-        {/* Header */}
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
             Core Capabilities
           </h2>
 
-          <p className="mt-2 text-3xl md:text-4xl font-bold">
+          <p className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Built as trust infrastructure
           </p>
 
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 leading-relaxed text-muted-foreground">
             TrustFlow provides the essential systems required to safely exchange
             goods — without blind trust or manual coordination.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <FeatureCard key={feature.title} {...feature} />
           ))}

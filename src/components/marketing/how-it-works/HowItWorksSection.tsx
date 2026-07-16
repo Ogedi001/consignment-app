@@ -50,26 +50,24 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="md:px-20 py-20 bg-muted/30">
+    <section id="how-it-works" className="bg-background py-24 md:px-20">
       <div className="container mx-auto px-6">
-        {/* Header */}
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
             How It Works
           </h2>
 
-          <p className="mt-2 text-3xl md:text-4xl font-bold">
+          <p className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             A simple flow built for trust
           </p>
 
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 leading-relaxed text-muted-foreground">
             TrustFlow coordinates payment, delivery, and confirmation — so both
             buyers and sellers stay protected.
           </p>
         </div>
 
-        {/* Steps */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {steps.map((step) => (
             <Step key={step.step} {...step} />
           ))}

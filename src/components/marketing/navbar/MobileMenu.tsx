@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NavLinks } from "./NavLinks";
+import { LogoLockup } from "./LogoLockup";
 
 const track = (event: string) => {
   console.log(event);
@@ -26,18 +27,22 @@ export function MobileMenu() {
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="right" className="w-72">
+        <SheetContent side="right" className="w-80 border-border bg-background">
           <SheetHeader>
-            <SheetTitle className="text-lg font-bold">
-              TrustFlow
+            <SheetTitle className="sr-only">
+              Trustflow navigation
             </SheetTitle>
+            <LogoLockup className="w-fit" />
           </SheetHeader>
 
-          <nav className="mt-8 px-6 flex flex-col gap-4">
+          <nav className="mt-6 flex flex-col gap-4 px-6">
             <NavLinks />
 
             <div className="mt-6 flex flex-col gap-3">
-              <Button onClick={() => track("mobile_get_started")}>
+              <Button
+                variant="gradient"
+                onClick={() => track("mobile_get_started")}
+              >
                 Get Started
               </Button>
 

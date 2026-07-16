@@ -5,14 +5,11 @@ import { HeroPreview } from "./HeroPreview";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-16 md:pt-20">
-      {/* Simplified background */}
-      <div className="absolute inset-0 -z-10 bg-linear-to-br from-primary/5 via-background to-background" />
+    <section className="relative overflow-hidden bg-background pt-18 md:pt-24">
+      <div className="absolute inset-x-0 top-0 -z-10 h-px bg-brand-gradient" />
+      <div className="absolute inset-0 -z-10 opacity-60 bg-[radial-gradient(var(--border)_1px,transparent_1px)] [bg-size:24px_24px]" />
 
-      {/* Subtle texture */}
-      <div className="absolute inset-0 -z-10 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [bg-size:16px_16px]" />
-
-      <div className="container mx-auto px-6 md:px-20 py-12 md:py-20 lg:py-28 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-6 py-16 md:px-20 md:py-24 lg:grid-cols-2 lg:gap-16 lg:py-28">
         <HeroContent />
         <HeroPreview />
       </div>

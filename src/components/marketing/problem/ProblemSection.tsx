@@ -36,15 +36,15 @@ const problems = [
 
 export function ProblemSection() {
   return (
-    <section id="problem" className=" md:px-20 py-20 bg-background">
+    <section id="problem" className="bg-background py-24 md:px-20">
       <div className="container mx-auto px-6 text-center">
-        <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="text-sm font-semibold uppercase tracking-wide text-primary">
           The problem
         </p>
 
         <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight">
           Every transaction is a
-          <span className="block text-destructive">leap of faith</span>
+          <span className="block text-foreground">leap of faith</span>
         </h2>
 
         <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
@@ -52,7 +52,7 @@ export function ProblemSection() {
           opportunities.
         </p>
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {problems.map((problem) => (
             <ProblemCard key={problem.title} {...problem} />
           ))}

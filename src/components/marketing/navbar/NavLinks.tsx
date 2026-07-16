@@ -15,7 +15,7 @@ export function NavLinks({ onClick }: NavLinksProps) {
           key={link.id}
           href={`#${link.id}`}
           onClick={onClick}
-          className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          className="rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
         >
           {link.label}
         </Link>

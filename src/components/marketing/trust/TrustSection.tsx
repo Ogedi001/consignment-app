@@ -32,33 +32,30 @@ const trustItems = [
 
 export function TrustSection() {
   return (
-    <section id="trust" className="py-24">
+    <section id="trust" className="border-y border-border bg-surface py-24">
       <div className="container mx-auto px-6">
-        {/* Header */}
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">
             Trust & Security
           </h2>
 
-          <p className="mt-2 text-3xl md:text-4xl font-bold">
+          <p className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Built for confidence
           </p>
 
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 leading-relaxed text-muted-foreground">
             TrustFlow is designed to remove fear from transactions — with
             safeguards that protect both sides, every step of the way.
           </p>
         </div>
 
-        {/* Trust items */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-4xl mx-auto">
+        <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2">
           {trustItems.map((item) => (
             <TrustItem key={item.title} {...item} />
           ))}
         </div>
 
-        {/* Subtle reassurance */}
-        <div className="mt-16 text-center text-sm text-muted-foreground">
+        <div className="mt-16 text-center text-sm font-medium text-muted-foreground">
           TrustFlow never takes custody of goods and never favors buyers or
           sellers.
         </div>

@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { Linkedin, Twitter } from "lucide-react";
+import { LogoLockup } from "@/components/marketing/navbar/LogoLockup";
 
 const productLinks = [
   { href: "#features", label: "Features" },
@@ -19,22 +19,17 @@ const companyLinks = [
 ];
 
 const socialLinks = [
-  { href: "#", label: "Twitter", src: "/twitter.svg" },
-  { href: "#", label: "LinkedIn", src: "/linkedin.svg" },
+  { href: "#", label: "Twitter", icon: Twitter },
+  { href: "#", label: "LinkedIn", icon: Linkedin },
 ];
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background">
+    <footer className="border-t border-border bg-background">
       <div className="container mx-auto px-6 py-20 max-w-7xl">
-        {/* Top */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Brand */}
           <div className="flex flex-col gap-4 md:col-span-2">
-            <div className="flex items-center gap-2 text-lg font-semibold">
-              <ShieldCheck className="h-5 w-5 text-primary" />
-              TrustFlow
-            </div>
+            <LogoLockup className="w-fit" />
 
             <p className="max-w-sm text-sm text-muted-foreground">
               Trust infrastructure for secure, high-value trade. Built to
@@ -46,13 +41,15 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Product */}
           <div>
             <h4 className="text-sm font-semibold mb-4">Product</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               {productLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="hover:text-foreground">
+                  <Link
+                    href={link.href}
+                    className="rounded-md transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -60,13 +57,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
           <div>
             <h4 className="text-sm font-semibold mb-4">Company</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               {companyLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="hover:text-foreground">
+                  <Link
+                    href={link.href}
+                    className="rounded-md transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -75,33 +74,29 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="mt-16 border-t" />
+        <div className="mt-16 border-t border-border" />
 
-        {/* Bottom */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-xs text-muted-foreground text-center md:text-left">
             Payments held in escrow. Funds released only after confirmed
             completion.
           </p>
 
-          {/* Socials */}
           <div className="flex gap-4">
-            {socialLinks.map((social) => (
+            {socialLinks.map((social) => {
+              const Icon = social.icon;
+
+              return (
               <Link
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
-                className="h-10 w-10 rounded-full border flex items-center justify-center hover:bg-muted transition"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-primary/25 hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
               >
-                <Image
-                  src={social.src}
-                  alt={social.label}
-                  width={24}
-                  height={24}
-                />
+                <Icon className="h-4 w-4" />
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

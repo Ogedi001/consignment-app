@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Express Logistics Courier",
+  title: "Trustflow | Trade with Confidence",
   description:
-    "Fast, reliable, and affordable logistics and courier services. We deliver parcels, packages, and goods safely and on time across cities and regions.",
+    "AI-powered trust infrastructure for secure commerce, escrow-backed payments, delivery verification, and dispute resolution.",
 };
 
 export default function RootLayout({
