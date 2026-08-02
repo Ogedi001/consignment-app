@@ -46,12 +46,12 @@ export function MobileMenu() {
                 Get Started
               </Button>
 
-              <Button asChild variant="outline">
+              {/* <Button asChild variant="outline">
                 <Link href="#track">
                   Track
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
-              </Button>
+              </Button> */}
 
               <Button variant="ghost" onClick={() => track("mobile_sign_in")}>
                 Sign in

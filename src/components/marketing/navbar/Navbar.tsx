@@ -33,12 +33,12 @@ export function Navbar() {
             Sign in
           </Button>
 
-          <Button asChild variant="outline" size="sm">
+          {/* <Button asChild variant="outline" size="sm">
             <Link href="#track">
               Track
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-          </Button>
+          </Button> */}
 
           <Button
             size="sm"
