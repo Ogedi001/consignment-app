@@ -1,8 +1,8 @@
 "use client";
 
-import { Menu, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
 import {
   Sheet,
   SheetContent,
@@ -39,12 +39,12 @@ export function MobileMenu() {
             <NavLinks />
 
             <div className="mt-6 flex flex-col gap-3">
-              <Button
+              <ComingSoonButton
                 variant="gradient"
                 onClick={() => track("mobile_get_started")}
               >
                 Get Started
-              </Button>
+              </ComingSoonButton>
 
               {/* <Button asChild variant="outline">
                 <Link href="#track">
@@ -53,9 +53,12 @@ export function MobileMenu() {
                 </Link>
               </Button> */}
 
-              <Button variant="ghost" onClick={() => track("mobile_sign_in")}>
+              <ComingSoonButton
+                variant="ghost"
+                onClick={() => track("mobile_sign_in")}
+              >
                 Sign in
-              </Button>
+              </ComingSoonButton>
             </div>
           </nav>
         </SheetContent>

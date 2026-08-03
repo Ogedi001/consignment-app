@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 
 export function CTASection() {
@@ -26,10 +26,10 @@ export function CTASection() {
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" variant="gradient" className="px-8">
+            <ComingSoonButton size="lg" variant="gradient" className="px-8">
               Start a protected transaction
               <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            </ComingSoonButton>
 
             <span className="text-sm text-white/65">
               No signup fees • No subscriptions

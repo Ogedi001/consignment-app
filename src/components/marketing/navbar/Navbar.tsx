@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
 import { NavLinks } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
 import { LogoLockup } from "./LogoLockup";
@@ -25,13 +23,13 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden lg:flex items-center gap-3">
-          <Button
+          <ComingSoonButton
             variant="ghost"
             size="sm"
             onClick={() => track("nav_sign_in")}
           >
             Sign in
-          </Button>
+          </ComingSoonButton>
 
           {/* <Button asChild variant="outline" size="sm">
             <Link href="#track">
@@ -40,13 +38,13 @@ export function Navbar() {
             </Link>
           </Button> */}
 
-          <Button
+          <ComingSoonButton
             size="sm"
             variant="gradient"
             onClick={() => track("nav_get_started")}
           >
             Get Started
-          </Button>
+          </ComingSoonButton>
         </div>
 
         {/* Mobile */}
