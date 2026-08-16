@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { navLinks } from "@/lib/constants/nav";
+import { navLinks } from "@/features/marketing/config/nav";
 
 interface NavLinksProps {
   onClick?: () => void;

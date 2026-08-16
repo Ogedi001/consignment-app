@@ -1,6 +1,6 @@
 "use client";
 
-import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
+import { ComingSoonButton } from "./ComingSoonButton";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 
 export function CTASection() {

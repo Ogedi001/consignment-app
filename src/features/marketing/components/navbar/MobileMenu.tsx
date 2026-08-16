@@ -1,15 +1,16 @@
 "use client";
 
 import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
+import { Button } from "@/shared/components/ui/button";
+import { ComingSoonButton } from "../ComingSoonButton";
+import { useAppStore } from "@/providers/zustand-provider";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/shared/components/ui/sheet";
 import { NavLinks } from "./NavLinks";
 import { LogoLockup } from "./LogoLockup";
 
@@ -18,9 +19,12 @@ const track = (event: string) => {
 };
 
 export function MobileMenu() {
+  const isOpen = useAppStore((state) => state.isMobileNavigationOpen);
+  const setIsOpen = useAppStore((state) => state.setMobileNavigationOpen);
+
   return (
     <div className="lg:hidden">
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
             <Menu className="h-6 w-6" />

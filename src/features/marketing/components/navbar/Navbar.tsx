@@ -1,6 +1,6 @@
 "use client";
 
-import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
+import { ComingSoonButton } from "../ComingSoonButton";
 import { NavLinks } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
 import { LogoLockup } from "./LogoLockup";

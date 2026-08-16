@@ -1,6 +1,6 @@
 "use client";
 
-import { ComingSoonButton } from "@/components/marketing/ComingSoonButton";
+import { ComingSoonButton } from "../ComingSoonButton";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 
 export function HeroActions() {

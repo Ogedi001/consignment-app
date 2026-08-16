@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Bell, CheckCircle2, Clock3, ShieldCheck, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { CheckCircle2, Clock3, ShieldCheck, X } from "lucide-react";
+import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 
 type ComingSoonButtonProps = React.ComponentProps<typeof Button> & {
   modalDescription?: string;

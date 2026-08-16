@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Linkedin, Twitter } from "lucide-react";
-import { LogoLockup } from "@/components/marketing/navbar/LogoLockup";
+import { LogoLockup } from "./navbar/LogoLockup";
 
 const productLinks = [
   { href: "#features", label: "Features" },
