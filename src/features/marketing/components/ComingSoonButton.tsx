@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CheckCircle2, Clock3, ShieldCheck, X } from "lucide-react";
+import Image from "next/image";
+import { CheckCircle2, Clock3, X } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 
@@ -42,9 +43,13 @@ export function ComingSoonButton({
               </Dialog.Close>
             </div>
 
-            <div className="mt-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient">
-              <ShieldCheck className="h-6 w-6 text-white" />
-            </div>
+            <Image
+              className="mt-5 h-14 w-14 rounded-2xl shadow-lg"
+              src="/logo/icon_dark_tf.jpeg"
+              alt="Trustflow"
+              width={64}
+              height={64}
+            />
 
             <Dialog.Title className="mt-5 text-2xl font-bold tracking-normal">
               {modalTitle}
