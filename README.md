@@ -5,6 +5,7 @@ server state, and focused Zustand UI state.
 
 - [Architecture reference](docs/frontend-architecture.md)
 - [Feature integration guide](docs/frontend-integration-guide.md)
+- [Authentication API integration](docs/auth-api-integration.md)
 
 ## Getting Started
 
