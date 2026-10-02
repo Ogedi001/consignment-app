@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
   try {
     const backendResponse = await fetch(
-      `${trustflowApiUrl}/identity/auth/identifier`,
+      `${trustflowApiUrl}/identity/auth/register`,
       {
         method: "POST",
         body: await request.text(),

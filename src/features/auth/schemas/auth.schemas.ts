@@ -16,6 +16,8 @@ export const passwordSchema = z
   .string()
   .min(8, "Use at least 8 characters.")
   .regex(/[A-Z]/, "Include one uppercase letter.")
+  .regex(/[a-z]/, "Include one lowercase letter.")
+  .regex(/[^A-Za-z0-9]/, "Include one special character.")
   .regex(/\d/, "Include one number.");
 
 export const identifierFormSchema = z.object({ identifier: identifierSchema });

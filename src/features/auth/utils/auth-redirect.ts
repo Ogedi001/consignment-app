@@ -20,5 +20,5 @@ export function getSafeAuthRedirect(value: string | null | undefined) {
 export function withAuthRedirect(pathname: string, redirectTo?: string) {
   if (!redirectTo) return pathname;
 
-  return `${pathname}?redirect=${encodeURIComponent(redirectTo)}`;
+  return `${pathname}${pathname.includes("?") ? "&" : "?"}redirect=${encodeURIComponent(redirectTo)}`;
 }
