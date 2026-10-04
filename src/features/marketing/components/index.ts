@@ -2,6 +2,7 @@ export * from "./CTASection";
 export * from "./ComingSoonButton";
 export * from "./Footer";
 export * from "./PricingPreview";
+export * from "./MarketingInfoPage";
 export * from "./features/FeaturesSection";
 export * from "./hero/Hero";
 export * from "./how-it-works/HowItWorksSection";

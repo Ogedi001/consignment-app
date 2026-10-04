@@ -2,7 +2,7 @@
 
 import { Menu } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { ComingSoonButton } from "../ComingSoonButton";
+import Link from "next/link";
 import { useAppStore } from "@/providers/zustand-provider";
 import {
   Sheet,
@@ -13,10 +13,6 @@ import {
 } from "@/shared/components/ui/sheet";
 import { NavLinks } from "./NavLinks";
 import { LogoLockup } from "./LogoLockup";
-
-const track = (event: string) => {
-  console.log(event);
-};
 
 export function MobileMenu() {
   const isOpen = useAppStore((state) => state.isMobileNavigationOpen);
@@ -43,26 +39,8 @@ export function MobileMenu() {
             <NavLinks />
 
             <div className="mt-6 flex flex-col gap-3">
-              <ComingSoonButton
-                variant="gradient"
-                onClick={() => track("mobile_get_started")}
-              >
-                Get Started
-              </ComingSoonButton>
-
-              {/* <Button asChild variant="outline">
-                <Link href="#track">
-                  Track
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button> */}
-
-              <ComingSoonButton
-                variant="ghost"
-                onClick={() => track("mobile_sign_in")}
-              >
-                Sign in
-              </ComingSoonButton>
+              <Button asChild variant="gradient"><Link href="/register">Get started</Link></Button>
+              <Button asChild variant="ghost"><Link href="/login">Sign in</Link></Button>
             </div>
           </nav>
         </SheetContent>

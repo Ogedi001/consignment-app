@@ -1,13 +1,10 @@
 "use client";
 
-import { ComingSoonButton } from "../ComingSoonButton";
+import Link from "next/link";
+import { Button } from "@/shared/components/ui";
 import { NavLinks } from "./NavLinks";
 import { MobileMenu } from "./MobileMenu";
 import { LogoLockup } from "./LogoLockup";
-
-const track = (event: string) => {
-  console.log(event);
-};
 
 export function Navbar() {
   return (
@@ -23,28 +20,8 @@ export function Navbar() {
 
         {/* Desktop CTAs */}
         <div className="hidden lg:flex items-center gap-3">
-          <ComingSoonButton
-            variant="ghost"
-            size="sm"
-            onClick={() => track("nav_sign_in")}
-          >
-            Sign in
-          </ComingSoonButton>
-
-          {/* <Button asChild variant="outline" size="sm">
-            <Link href="#track">
-              Track
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button> */}
-
-          <ComingSoonButton
-            size="sm"
-            variant="gradient"
-            onClick={() => track("nav_get_started")}
-          >
-            Get Started
-          </ComingSoonButton>
+          <Button asChild variant="ghost" size="sm"><Link href="/login">Sign in</Link></Button>
+          <Button asChild size="sm" variant="gradient"><Link href="/register">Get started</Link></Button>
         </div>
 
         {/* Mobile */}

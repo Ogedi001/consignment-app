@@ -4,6 +4,7 @@ Trustflow is a Next.js frontend organized around feature modules, React Query
 server state, and focused Zustand UI state.
 
 - [Architecture reference](docs/frontend-architecture.md)
+- [Frontend design governance](docs/frontend-design-governance.md)
 - [Feature integration guide](docs/frontend-integration-guide.md)
 - [Authentication API integration](docs/auth-api-integration.md)
 

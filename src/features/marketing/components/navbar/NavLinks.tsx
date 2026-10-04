@@ -12,8 +12,8 @@ export function NavLinks({ onClick }: NavLinksProps) {
     <>
       {navLinks.map((link) => (
         <Link
-          key={link.id}
-          href={`#${link.id}`}
+          key={link.href}
+          href={link.href}
           onClick={onClick}
           className="rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
         >

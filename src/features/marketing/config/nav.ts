@@ -1,6 +1,6 @@
 export const navLinks = [
-  { id: "how-it-works", label: "How It Works" },
-  { id: "features", label: "Features" },
-  { id: "trust", label: "Trust & Security" },
-  { id: "pricing", label: "Pricing" },
+  { href: "/how-it-works", label: "How It Works" },
+  { href: "/protection", label: "Protection" },
+  { href: "/for-buyers", label: "For buyers" },
+  { href: "/pricing", label: "Pricing" },
 ];
