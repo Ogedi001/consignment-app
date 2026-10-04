@@ -9,6 +9,7 @@ const productLinks = [
   { href: "#how-it-works", label: "How it works" },
   { href: "#pricing", label: "Pricing" },
   { href: "#trust", label: "Trust & Security" },
+  { href: "/trust-strength", label: "Trust Strength" },
 ];
 
 const companyLinks = [

@@ -8,28 +8,24 @@ const problems = [
     title: "Fear before every payment",
     description:
       "Buyers are scared to pay. Sellers are scared to ship. Every deal starts with doubt.",
-    stat: "40% of sellers report payment defaults",
     icon: ShieldAlert,
   },
   {
     title: "Goods go missing",
     description:
       "Deliveries arrive late, damaged, or not at all with no proof of what really happened.",
-    stat: "1 in 5 trades face delivery disputes",
     icon: PackageX,
   },
   {
     title: "Disputes turn into chaos",
     description:
       "When something goes wrong, there’s no neutral system to resolve it fairly.",
-    stat: "Average dispute takes weeks",
     icon: Gavel,
   },
   {
-    title: "No reputation system",
+    title: "No shared transaction record",
     description:
-      "Strangers trade with no history, trust score, or accountability.",
-    stat: "New sellers take 3× longer to close deals",
+      "Strangers trade without a shared record of agreed terms, delivery updates, or supporting evidence.",
     icon: UserX,
   },
 ];

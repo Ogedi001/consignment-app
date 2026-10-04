@@ -1,7 +1,8 @@
 "use client";
 
 import { TrustItem } from "./TrustItem";
-import { ShieldCheck, Scale, Lock, FileCheck } from "lucide-react";
+import Link from "next/link";
+import { ShieldCheck, Scale, FileCheck, UserRoundCheck } from "lucide-react";
 
 const trustItems = [
   {
@@ -11,21 +12,21 @@ const trustItems = [
     icon: Scale,
   },
   {
-    title: "Escrow-backed protection",
+    title: "Clear release conditions",
     description:
       "Funds are held securely and released only when agreed conditions are met — no blind payments or upfront risk.",
     icon: ShieldCheck,
   },
   {
-    title: "Secure by default",
+    title: "Evidence-backed trust profiles",
     description:
-      "Transactions and data are protected with modern encryption, access controls, and continuous monitoring.",
-    icon: Lock,
+      "Trust Strength provides context about a participant’s verified assurance. It does not decide the outcome of a transaction.",
+    icon: UserRoundCheck,
   },
   {
-    title: "Compliance-aware",
+    title: "Evidence when it is needed",
     description:
-      "Regulatory alignment and consumer protection are built into the system by default.",
+      "When a material decision needs support, the relevant transaction details and evidence can be reviewed.",
     icon: FileCheck,
   },
 ];
@@ -44,8 +45,8 @@ export function TrustSection() {
           </p>
 
           <p className="mt-4 leading-relaxed text-muted-foreground">
-            TrustFlow is designed to remove fear from transactions — with
-            safeguards that protect both sides, every step of the way.
+            TrustFlow makes each party’s responsibility, protection status, and
+            next step understandable throughout the transaction.
           </p>
         </div>
 
@@ -58,6 +59,12 @@ export function TrustSection() {
         <div className="mt-16 text-center text-sm font-medium text-muted-foreground">
           TrustFlow never takes custody of goods and never favors buyers or
           sellers.
+          <Link
+            href="/trust-strength"
+            className="ml-2 inline-flex text-primary hover:text-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+          >
+            How Trust Strength works
+          </Link>
         </div>
       </div>
     </section>

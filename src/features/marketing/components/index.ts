@@ -11,3 +11,4 @@ export * from "./problem/ProblemSection";
 export * from "./social-proof/SocialProof";
 export * from "./solution/SolutionSection";
 export * from "./trust/TrustSection";
+export * from "./TrustExplainerPage";

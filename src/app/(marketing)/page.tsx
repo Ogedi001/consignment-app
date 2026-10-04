@@ -7,7 +7,6 @@ import {
   Navbar,
   PricingPreview,
   ProblemSection,
-  SocialProof,
   SolutionSection,
   TrustSection,
 } from "@/features/marketing";
@@ -18,7 +17,6 @@ const Page = () => {
       <Navbar />
       <main>
         <Hero />
-        <SocialProof />
         <ProblemSection />
         <SolutionSection />
         <FeaturesSection />

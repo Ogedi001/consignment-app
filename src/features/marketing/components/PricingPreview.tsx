@@ -1,12 +1,12 @@
 "use client";
 
-import { Check, ShieldCheck } from "lucide-react";
+import { Check } from "lucide-react";
 
 const pricingFeatures = [
   "Escrow protection included",
   "Buyer & seller coverage",
   "Dispute resolution support",
-  "Local bank transfers & cards",
+  "Clear terms before confirmation",
 ];
 
 export function PricingPreview() {
@@ -23,26 +23,18 @@ export function PricingPreview() {
           </p>
 
           <p className="mt-4 leading-relaxed text-muted-foreground">
-            You only pay when a transaction is completed successfully.
+            Transaction fees and payment terms are shown before you confirm a
+            protected transaction.
           </p>
         </div>
 
         <div className="mt-16 max-w-xl mx-auto">
-          <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-enterprise">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-              <ShieldCheck className="h-4 w-4 text-brand-accent" />
-              Pay only when it works
-            </div>
-
-            <div className="mt-6">
-              <span className="text-5xl font-bold text-foreground">3%</span>
-              <span className="ml-2 text-muted-foreground">
-                per successful transaction
-              </span>
-            </div>
+          <div className="border border-border bg-card p-8 text-center">
+            <p className="text-lg font-semibold text-foreground">Know the cost before you proceed</p>
 
             <p className="mt-4 text-sm text-muted-foreground">
-              No setup fees. No subscriptions. No hidden charges.
+              The applicable fee and payment method are shown with the order
+              before you confirm it.
             </p>
 
             <ul className="mt-8 space-y-3 text-left text-sm text-muted-foreground">
@@ -55,14 +47,13 @@ export function PricingPreview() {
             </ul>
 
             <p className="mt-6 text-sm text-muted-foreground">
-              Fees apply automatically when a protected transaction is created.
+              You can review the transaction terms before payment is protected.
             </p>
           </div>
         </div>
 
         <div className="mt-10 text-center text-sm text-muted-foreground">
-          Pricing may vary slightly based on transaction size and payment
-          method.
+          Exact fees may depend on the transaction and payment method.
         </div>
       </div>
     </section>

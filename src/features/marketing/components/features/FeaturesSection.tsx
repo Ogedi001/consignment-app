@@ -1,7 +1,7 @@
 "use client";
 
 import { FeatureCard } from "./FeatureCard";
-import { Wallet, Link, Truck, Scale, TrendingUp, Shield } from "lucide-react";
+import { Wallet, Link, Truck, Scale, FileCheck, Shield } from "lucide-react";
 
 const features = [
   {
@@ -29,15 +29,15 @@ const features = [
     icon: Scale,
   },
   {
-    title: "Trust & reputation scoring",
+    title: "Transaction records",
     description:
-      "Every completed transaction builds credibility, helping reliable participants transact faster.",
-    icon: TrendingUp,
+      "Keep agreed terms, delivery updates, and relevant evidence connected to the transaction.",
+    icon: FileCheck,
   },
   {
-    title: "Buyer protection",
+    title: "Protection for both parties",
     description:
-      "Transactions are backed by escrow protection, delivery verification, and clear platform policies.",
+      "Payment protection, delivery confirmation, and clear terms help buyers and sellers understand what happens next.",
     icon: Shield,
   },
 ];

@@ -1,40 +1,40 @@
 "use client";
 
 import { SolutionPoint } from "./SolutionPoint";
-import { ShieldCheck, PackageSearch, Scale, TrendingUp } from "lucide-react";
+import { ShieldCheck, PackageSearch, Scale, FileCheck } from "lucide-react";
 
 const solutions = [
   {
-    title: "Escrow Protection",
+    title: "Payment protection",
     description:
       "Funds are held securely until goods are delivered and confirmed. Buyers stay safe. Sellers get paid with confidence.",
     icon: ShieldCheck,
-    problemSolved: "Payment Risk",
-    impact: "Zero blind payments",
+    problemSolved: "Unprotected payment",
+    impact: "Clear release conditions",
   },
   {
-    title: "Verified Delivery Tracking",
+    title: "Delivery visibility",
     description:
       "Every transaction includes shipment visibility and proof of delivery so both sides know exactly what happened.",
     icon: PackageSearch,
-    problemSolved: "Failed Deliveries",
-    impact: "Full delivery transparency",
+    problemSolved: "Unclear delivery status",
+    impact: "Shared delivery updates",
   },
   {
-    title: "Neutral Dispute Resolution",
+    title: "Evidence-based resolution",
     description:
       "When problems arise, TrustFlow mediates using evidence and clear rules instead of personal conflict.",
     icon: Scale,
-    problemSolved: "Trade Conflicts",
-    impact: "Faster fair outcomes",
+    problemSolved: "Unresolved issues",
+    impact: "A clear path when something goes wrong",
   },
   {
-    title: "Trust & Reputation Scores",
+    title: "Shared transaction record",
     description:
-      "Each successful transaction builds a public trust score that proves reliability and unlocks more business.",
-    icon: TrendingUp,
-    problemSolved: "No Trust History",
-    impact: "Credibility becomes currency",
+      "The agreed terms, delivery updates, and relevant evidence stay connected to the transaction.",
+    icon: FileCheck,
+    problemSolved: "Missing transaction context",
+    impact: "Details available when they matter",
   },
 ];
 
@@ -49,7 +49,7 @@ export function SolutionSection() {
 
           <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight">
             Trust infrastructure for
-            <span className="block text-brand-gradient">every transaction</span>
+            <span className="block">every transaction</span>
           </h2>
 
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">

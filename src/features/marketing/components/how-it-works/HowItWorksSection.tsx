@@ -36,7 +36,7 @@ const steps = [
     step: "05",
     title: "Funds are released",
     description:
-      "Once conditions are met, payment is released automatically to the seller.",
+      "When the agreed conditions are met, payment can be released to the seller.",
     icon: Wallet,
   },
   {
