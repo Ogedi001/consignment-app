@@ -37,7 +37,7 @@ const copy = {
   },
   "sign-up": {
     title: "Create your account",
-    description: "Start trading with confidence.",
+    description: "Create your account, then verify your contact details.",
     alternate: "Already have an account?",
     alternateHref: "/auth/sign-in",
     alternateLabel: "Sign in",

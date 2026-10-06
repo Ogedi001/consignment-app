@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Circle } from "lucide-react";
 
 const requirements = [
   {
@@ -22,7 +22,7 @@ const requirements = [
 
 export function PasswordRequirements({ password }: { password: string }) {
   return (
-    <div className="rounded-lg bg-surface px-3 py-3">
+    <div className="rounded-lg bg-surface px-3 py-3" aria-live="polite">
       <p className="text-xs font-semibold text-foreground">
         Password requirements
       </p>
@@ -32,10 +32,15 @@ export function PasswordRequirements({ password }: { password: string }) {
           return (
             <li
               key={requirement.label}
-              className={`flex items-center gap-2 text-xs ${met ? "text-success" : "text-muted-foreground"}`}
+              className="flex items-center gap-2 text-xs text-muted-foreground"
             >
-              <Check className="size-3.5" aria-hidden="true" />
-              {requirement.label}
+              {met ? (
+                <Check className="size-3.5 text-success" aria-hidden="true" />
+              ) : (
+                <Circle className="size-3.5" aria-hidden="true" />
+              )}
+              <span>{requirement.label}</span>
+              <span className="sr-only">{met ? " met" : " not met"}</span>
             </li>
           );
         })}

@@ -180,7 +180,6 @@ export function VerificationExperience() {
   const [resendMessage, setResendMessage] = useState<string>();
   const [cooldown, setCooldown] = useState(0);
   const [verified, setVerified] = useState(false);
-  console.log({ linkToken });
   useEffect(() => {
     setContext(readVerificationFlowContext());
     setReady(true);
@@ -319,7 +318,6 @@ export function VerificationExperience() {
           <AuthStatus message={issue?.message} />
           <Button
             type="button"
-            variant="gradient"
             size="lg"
             className="mt-7 w-full"
             onClick={submitLink}
@@ -351,7 +349,7 @@ export function VerificationExperience() {
             your account.
           </p>
           <div className="mt-7 grid gap-3">
-            <Button asChild variant="gradient" size="lg">
+            <Button asChild size="lg">
               <Link href="/auth">Start registration</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
@@ -398,7 +396,6 @@ export function VerificationExperience() {
           <AuthStatus message={issue?.message} />
           <Button
             type="submit"
-            variant="gradient"
             size="lg"
             className="w-full"
             disabled={

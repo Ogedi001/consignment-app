@@ -48,7 +48,7 @@ export function AuthGateway() {
             Development mock complete. No real account or session was created.
           </p>
         ) : null}
-        <Button asChild variant="gradient" size="lg" className="w-full">
+        <Button asChild size="lg" className="w-full">
           <Link href={withAuthRedirect("/auth/sign-in", redirectTo)}>
             Continue with email or phone
           </Link>

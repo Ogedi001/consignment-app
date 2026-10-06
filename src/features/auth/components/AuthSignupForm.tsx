@@ -65,7 +65,6 @@ export function AuthSignupForm({
       <PasswordRequirements password={password} />
       <Button
         type="submit"
-        variant="gradient"
         size="lg"
         className="w-full"
         disabled={isPending}

@@ -7,7 +7,7 @@ export default function ResetPasswordPage() {
   return (
     <AuthUnavailableJourney
       title="Choose a new password"
-      description="This route is reserved for a verified password-reset session. A reset-token contract has not yet been integrated."
+      description="Password reset is not available yet. Return to sign in to access an existing account."
     />
   );
 }

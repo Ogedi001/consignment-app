@@ -7,7 +7,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthUnavailableJourney
       title="Reset your password"
-      description="Password recovery will be available here once the Trustflow authentication service provides its recovery contract."
+      description="Password recovery is not available yet. Return to sign in to access an existing account."
     />
   );
 }

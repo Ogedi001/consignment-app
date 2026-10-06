@@ -1,2 +1,8 @@
-import Link from "next/link";
-export default function Page() { return <main className="grid min-h-dvh place-items-center bg-surface p-6"><section className="w-full max-w-md rounded-xl border border-border bg-background p-6"><h1 className="text-2xl font-bold">Additional sign-in verification</h1><p className="mt-3 text-sm leading-6 text-muted-foreground">Multi-factor authentication will appear here when it is enabled for your account.</p><Link href="/login" className="mt-6 inline-block text-sm font-semibold text-primary hover:underline">Return to sign in</Link></section></main>; }
+import { AuthUnavailableJourney } from "@/features/auth";
+
+export default function Page() {
+  return <AuthUnavailableJourney
+    title="Additional sign-in verification"
+    description="Additional sign-in verification is not available yet. Return to sign in to access your account."
+  />;
+}

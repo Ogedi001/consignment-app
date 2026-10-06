@@ -98,5 +98,5 @@ export function getAuthErrorMessage(error: unknown) {
   }
   if (error instanceof TypeError)
     return "We couldn't connect right now. Please check your connection and try again.";
-  return "Something went wrong. Please try again.";
+  return "We could not complete this request. Your account has not changed. Please try again.";
 }
