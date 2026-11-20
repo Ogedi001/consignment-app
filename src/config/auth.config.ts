@@ -5,7 +5,9 @@ export const authConfig = {
     register: "/api/auth/register",
     verify: "/api/auth/verify",
     resendVerification: "/api/auth/resend-verification",
-    signIn: process.env.NEXT_PUBLIC_AUTH_SIGN_IN_ENDPOINT,
+    // This BFF route owns the login/refresh cookies. An override remains
+    // available for deployments that intentionally use another same-origin gateway.
+    signIn: process.env.NEXT_PUBLIC_AUTH_SIGN_IN_ENDPOINT ?? "/api/auth/sign-in",
     signUp: process.env.NEXT_PUBLIC_AUTH_SIGN_UP_ENDPOINT,
     social: process.env.NEXT_PUBLIC_AUTH_SOCIAL_ENDPOINT,
   },

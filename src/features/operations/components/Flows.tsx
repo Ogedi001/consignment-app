@@ -79,22 +79,29 @@ export function CreateTransaction({ step }: { step: string }) {
                 </p>
               </div>
             ) : (
-              <label className="grid gap-2 text-sm font-semibold">
-                {step === "item"
-                  ? "Item details"
-                  : step === "buyer"
-                    ? "Buyer email or phone"
-                    : "Delivery confirmation condition"}
-                <Input
-                  placeholder={
-                    step === "item"
-                      ? "e.g. Vintage camera kit"
-                      : step === "buyer"
-                        ? "buyer@example.com"
-                        : "Buyer confirms delivery"
-                  }
-                />
-              </label>
+              <div>
+                <label className="grid gap-2 text-sm font-semibold">
+                  {step === "item"
+                    ? "Item details"
+                    : step === "buyer"
+                      ? "Buyer email or phone"
+                      : "Delivery confirmation condition"}
+                  <Input
+                    placeholder={
+                      step === "item"
+                        ? "e.g. Vintage camera kit"
+                        : step === "buyer"
+                          ? "buyer@example.com"
+                          : "Buyer confirms delivery"
+                    }
+                  />
+                </label>
+                {step === "item" ? (
+                  <Link href="/catalogue" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
+                    Choose an item from your catalogue
+                  </Link>
+                ) : null}
+              </div>
             )}
             <div className="mt-7 flex justify-between gap-3">
               <Button asChild variant="outline">

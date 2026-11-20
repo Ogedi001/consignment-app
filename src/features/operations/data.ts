@@ -5,6 +5,9 @@ export const orders: Order[] = [
   {
     id: "TF-1021",
     item: "Vintage camera kit",
+    itemId: "ITEM-001",
+    catalogueVersion: 2,
+    itemSnapshot: { attributes: "35mm body · 50mm lens · leather case", condition: "Good" },
     counterparty: "Maya Okafor",
     role: "Buyer",
     total: 480000,
@@ -15,6 +18,9 @@ export const orders: Order[] = [
   {
     id: "TF-1018",
     item: "Studio monitor pair",
+    itemId: "ITEM-002",
+    catalogueVersion: 1,
+    itemSnapshot: { attributes: "Pair · active monitors · black", condition: "Good" },
     counterparty: "Jordan Lee",
     role: "Seller",
     total: 315000,
@@ -25,6 +31,9 @@ export const orders: Order[] = [
   {
     id: "TF-1013",
     item: "Mechanical keyboard",
+    itemId: "ITEM-003",
+    catalogueVersion: 2,
+    itemSnapshot: { attributes: "Wireless · US layout · tactile switches", condition: "Excellent" },
     counterparty: "Amina Bello",
     role: "Buyer",
     total: 98000,

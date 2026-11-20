@@ -117,7 +117,7 @@ export function OrderDetail({ order }: { order: Order }) {
             {order.item}
           </h1>
           <p className="mt-2 text-muted-foreground">
-            {order.role} transaction with {order.counterparty}
+            {order.itemSnapshot.attributes} · {order.role} transaction with {order.counterparty}
           </p>
         </div>
         <Status status={order.status} />
@@ -149,12 +149,24 @@ export function OrderDetail({ order }: { order: Order }) {
         </div>
       </section>
       <div className="grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Transaction progress</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ol className="space-y-5 border-l border-border pl-5 text-sm">
+        <div className="grid gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Information captured for this transaction</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-3 text-sm">
+              <div className="flex justify-between gap-4"><span className="text-muted-foreground">Catalogue item</span><Link className="font-semibold text-primary hover:underline" href={`/catalogue/items/${order.itemId}`}>{order.itemId}</Link></div>
+              <div className="flex justify-between gap-4"><span className="text-muted-foreground">Version at agreement</span><strong>Version {order.catalogueVersion}</strong></div>
+              <div className="flex justify-between gap-4"><span className="text-muted-foreground">Condition at agreement</span><strong>{order.itemSnapshot.condition}</strong></div>
+              <p className="border-t border-border pt-3 text-muted-foreground">This snapshot remains the commercial record for this order, even if the current catalogue item changes.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Transaction progress</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="space-y-5 border-l border-border pl-5 text-sm">
               <li>
                 <strong>Payment protected</strong>
                 <p className="mt-1 text-muted-foreground">
@@ -183,9 +195,10 @@ export function OrderDetail({ order }: { order: Order }) {
                   met.
                 </p>
               </li>
-            </ol>
-          </CardContent>
-        </Card>
+              </ol>
+            </CardContent>
+          </Card>
+        </div>
         <div className="grid gap-6">
           <Card>
             <CardHeader>
@@ -211,6 +224,10 @@ export function OrderDetail({ order }: { order: Order }) {
                 </Link>
               ) : null}
             </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>Shipment and evidence</CardTitle></CardHeader>
+            <CardContent className="grid gap-3 text-sm"><Link href={`/orders/${encodeURIComponent(order.id)}/shipment`} className="font-semibold text-primary hover:underline">View shipment and delivery status</Link><Link href={`/orders/${encodeURIComponent(order.id)}/evidence`} className="font-semibold text-primary hover:underline">View transaction evidence</Link></CardContent>
           </Card>
           <Card>
             <CardHeader>

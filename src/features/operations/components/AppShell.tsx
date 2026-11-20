@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
+  Boxes,
   CircleHelp,
   LayoutDashboard,
   Menu,
@@ -20,6 +21,7 @@ import { cn } from "@/shared/lib/utils";
 
 const primary = [
   ["Home", "/home", LayoutDashboard],
+  ["Catalogue", "/catalogue", Boxes],
   ["Orders", "/orders", ReceiptText],
   ["Wallet", "/wallet", WalletCards],
   ["Messages", "/messages", MessageSquare],
