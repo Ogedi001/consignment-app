@@ -1,39 +1,352 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronRight, LoaderCircle } from "lucide-react";
+import { ChevronRight, LoaderCircle } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button, Input } from "@/shared/components/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+} from "@/shared/components/ui";
 import { ApiError } from "@/shared/lib";
-import { useCategories, useCategoryAttributes, useCreateCatalogueItem, useSaveAttributes } from "../services/catalogue.service";
-import type { AttributeDefinition, AttributeInput, ItemCondition } from "../types";
+import {
+  useCategories,
+  useCatalogueVersion,
+  useCreateCatalogueItem,
+} from "../services/catalogue.service";
+import type { ItemCondition } from "../types";
+import { DraftEditor } from "./DraftEditor";
 
-const schema = z.object({ categoryId: z.string().min(1, "Choose a category."), title: z.string().trim().min(1, "Enter an item title."), description: z.string().trim().min(1, "Describe the item."), item_condition: z.enum(["NEW", "USED", "REFURBISHED", "OTHER"]), seller_sku: z.string().max(128).optional() });
+const schema = z.object({
+  categoryId: z.string().min(1, "Choose a category."),
+  title: z.string().trim().min(1, "Enter an item title."),
+  description: z.string().trim().min(1, "Describe the item."),
+  item_condition: z.enum(["NEW", "USED", "REFURBISHED", "OTHER"]),
+  seller_sku: z.string().max(128).optional(),
+});
 type Values = z.infer<typeof schema>;
-type LocalValue = { value?: string; controlled_value_code?: string };
-const parse = (definition: AttributeDefinition, value: LocalValue): AttributeInput | null => { if (value.controlled_value_code) return { attribute_key: definition.attribute_key, controlled_value_code: value.controlled_value_code }; if (value.value === undefined || value.value.trim() === "") return null; if (definition.data_type === "BOOLEAN") return { attribute_key: definition.attribute_key, value: value.value === "true" }; if (definition.data_type === "DECIMAL") return { attribute_key: definition.attribute_key, value: Number(value.value) }; return { attribute_key: definition.attribute_key, value: value.value }; };
+type CreatedDraft = { itemId: string; versionId: string };
 
-function AttributeField({ definition, value, onChange }: { definition: AttributeDefinition; value?: LocalValue; onChange: (next: LocalValue) => void }) {
-  const id = `attribute-${definition.attribute_key}`; const controlled = definition.value_policy !== "FREEFORM" && definition.allowed_values.length > 0;
-  return <div><label htmlFor={id} className="text-sm font-semibold">{definition.display_name} {definition.is_required && <span className="text-destructive">*</span>}</label>{controlled ? <select id={id} value={value?.controlled_value_code ?? ""} onChange={(event) => onChange({ controlled_value_code: event.target.value || undefined })} className="mt-2 flex h-11 w-full rounded-lg border border-input bg-background px-3 text-sm"><option value="">Select an option</option>{definition.allowed_values.map((option) => <option key={option.value_code} value={option.value_code}>{option.display_name}</option>)}</select> : definition.data_type === "BOOLEAN" ? <label className="mt-3 flex items-center gap-2 text-sm"><input id={id} type="checkbox" checked={value?.value === "true"} onChange={(event) => onChange({ value: String(event.target.checked) })} /> Yes</label> : <Input id={id} className="mt-2" type={definition.data_type === "DECIMAL" ? "number" : definition.data_type === "DATE" ? "date" : "text"} step={definition.data_type === "DECIMAL" ? "any" : undefined} value={value?.value ?? ""} onChange={(event) => onChange({ value: event.target.value })} />}{(definition.unit_of_measure_code || !definition.is_required) && <p className="mt-1 text-xs text-muted-foreground">{definition.is_required ? "Required" : "Optional"}{definition.unit_of_measure_code ? ` · ${definition.unit_of_measure_code}` : ""}</p>}</div>;
+function DraftSetup({ draft }: { draft: CreatedDraft }) {
+  const version = useCatalogueVersion(draft.itemId, draft.versionId);
+  if (version.isPending)
+    return (
+      <p className="py-6 text-sm text-muted-foreground">
+        Preparing your draft…
+      </p>
+    );
+  if (version.error || !version.data)
+    return (
+      <p
+        role="alert"
+        className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm"
+      >
+        Your draft was created, but it could not be reloaded.{" "}
+        <Link
+          className="font-semibold text-primary underline"
+          href={`/catalogue/items/${draft.itemId}/edit`}
+        >
+          Continue editing it
+        </Link>
+        .
+      </p>
+    );
+  return (
+    <section className="space-y-6">
+      <header>
+        <p className="text-sm font-semibold text-primary">Draft created</p>
+        <h2 className="mt-1 text-xl font-bold">
+          Add specifications and options
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Stay here to add specifications. You can return to this private draft
+          at any time.
+        </p>
+      </header>
+      <DraftEditor draft={version.data} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Variants</CardTitle>
+          <CardDescription>
+            Options such as colour or size are configured separately from
+            specifications.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground">
+          Variant dimensions are available from the category, but the registered
+          interim variant route does not have a verified request contract.
+          Variant changes are therefore not submitted from this screen.
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Media</CardTitle>
+          <CardDescription>
+            Photos and supporting media will appear with the item
+            representation.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground">
+          The Catalogue API currently exposes media references only; it does not
+          provide an upload or media-write route.
+        </CardContent>
+      </Card>
+      <div className="flex flex-wrap gap-3">
+        <Button asChild>
+          <Link href={`/catalogue/items/${draft.itemId}`}>
+            Review draft <ChevronRight />
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/catalogue">Return to catalogue</Link>
+        </Button>
+      </div>
+    </section>
+  );
 }
 
 export function CreateCatalogueItemForm() {
-  const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { categoryId: "", title: "", description: "", item_condition: "USED", seller_sku: "" } });
-  const [step, setStep] = useState(1); const [parentId, setParentId] = useState<string | null>(null); const [values, setValues] = useState<Record<string, LocalValue>>({}); const [created, setCreated] = useState<string>();
-  const categories = useCategories(parentId); const categoryId = form.watch("categoryId"); const attributes = useCategoryAttributes(categoryId); const create = useCreateCatalogueItem(); const saveAttributes = useSaveAttributes(create.data?.item_id ?? "", create.data?.draft.version_id ?? "");
-  const selected = categories.data?.find((category) => category.category_id === categoryId);
-  useEffect(() => setValues({}), [categoryId]);
-  const advance = async () => { const fields = step === 1 ? ["categoryId"] as const : ["title", "description", "item_condition"] as const; if (await form.trigger(fields)) setStep((current) => Math.min(3, current + 1)); };
-  const submit = form.handleSubmit(async (input) => { if (!selected) return; try { const result = create.data ?? await create.mutateAsync({ category_key: selected.category_key, title: input.title, description: input.description, item_condition: input.item_condition as ItemCondition, seller_sku: input.seller_sku || null, representation_metadata: {} }); const inputs = (attributes.data ?? []).map((definition) => parse(definition, values[definition.attribute_key] ?? {})).filter((entry): entry is AttributeInput => Boolean(entry)); if (inputs.length) await saveAttributes.mutateAsync({ attributes: inputs, aggregateVersion: result.aggregate_version }); setCreated(result.item_id); } catch { /* mutation errors remain visible below and values stay in place */ } });
-  const error = (saveAttributes.error ?? create.error) instanceof ApiError ? (saveAttributes.error ?? create.error).message : (saveAttributes.error || create.error) ? "We could not save this draft. Your details are still here." : null;
-  if (created) return <div className="space-y-4 rounded-xl border border-success/30 bg-success/10 p-5"><Check className="size-6" /><div><h2 className="font-semibold">Draft saved</h2><p className="mt-1 text-sm text-muted-foreground">Your item is private until you review and publish it.</p></div><Button asChild><Link href={`/catalogue/items/${created}`}>Open item <ChevronRight /></Link></Button></div>;
-  return <form onSubmit={submit} noValidate className="space-y-6"><ol className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-muted-foreground" aria-label="Creation steps">{["Category", "Item details", "Specifications"].map((label, index) => <li key={label} className={step === index + 1 ? "text-primary" : ""}>{index + 1}. {label}</li>)}</ol>
-    {step === 1 && <section className="space-y-3"><p className="text-sm text-muted-foreground">Choose the most specific category. Categories are supplied by TrustFlow.</p>{parentId && <Button type="button" variant="ghost" size="sm" onClick={() => { setParentId(null); form.setValue("categoryId", ""); }}>← All categories</Button>}{categories.isPending ? <p className="text-sm text-muted-foreground">Loading categories…</p> : categories.error ? <p role="alert" className="text-sm text-destructive">Unable to load categories. Try again.</p> : <div className="grid gap-2 sm:grid-cols-2">{categories.data?.map((category) => <button type="button" key={category.category_id} onClick={() => { if (!parentId) setParentId(category.category_id); else form.setValue("categoryId", category.category_id, { shouldValidate: true }); }} className={`rounded-lg border p-4 text-left text-sm transition ${categoryId === category.category_id ? "border-primary bg-primary/5" : "border-border hover:bg-surface"}`}><span className="font-semibold">{category.display_name}</span><span className="mt-1 block text-xs text-muted-foreground">{parentId ? "Select category" : "View categories"}</span></button>)}</div>}{categoryId && <p className="text-sm text-muted-foreground">Selected category: <strong className="text-foreground">{selected?.display_name}</strong></p>}{form.formState.errors.categoryId && <p className="text-sm text-destructive">{form.formState.errors.categoryId.message}</p>}</section>}
-    {step === 2 && <section className="grid gap-5"><div><label className="text-sm font-semibold" htmlFor="catalogue-title">Item title</label><Input id="catalogue-title" className="mt-2" {...form.register("title")} />{form.formState.errors.title && <p className="mt-1 text-sm text-destructive">{form.formState.errors.title.message}</p>}</div><div><label className="text-sm font-semibold" htmlFor="catalogue-description">Description</label><textarea id="catalogue-description" rows={5} className="mt-2 flex w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" {...form.register("description")} />{form.formState.errors.description && <p className="mt-1 text-sm text-destructive">{form.formState.errors.description.message}</p>}</div><div className="grid gap-5 sm:grid-cols-2"><div><label className="text-sm font-semibold" htmlFor="catalogue-condition">Condition</label><select id="catalogue-condition" className="mt-2 flex h-11 w-full rounded-lg border border-input bg-background px-3 text-sm" {...form.register("item_condition")}><option value="NEW">New</option><option value="USED">Used</option><option value="REFURBISHED">Refurbished</option><option value="OTHER">Other</option></select></div><div><label className="text-sm font-semibold" htmlFor="catalogue-sku">Seller SKU <span className="font-normal text-muted-foreground">(optional)</span></label><Input id="catalogue-sku" className="mt-2" {...form.register("seller_sku")} /></div></div></section>}
-    {step === 3 && <section className="space-y-5"><p className="text-sm text-muted-foreground">Add what you know now. Required specifications are checked again when you publish.</p>{attributes.isPending ? <p className="text-sm text-muted-foreground">Loading specifications…</p> : attributes.error ? <p role="alert" className="text-sm text-destructive">Specifications could not be loaded. You can save the draft and complete it later.</p> : <div className="grid gap-4 sm:grid-cols-2">{attributes.data?.filter((definition) => !definition.variant_dimension).map((definition) => <AttributeField key={definition.attribute_key} definition={definition} value={values[definition.attribute_key]} onChange={(next) => setValues((current) => ({ ...current, [definition.attribute_key]: next }))} />)}</div>}</section>}
-    {error && <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm">{error}</p>}<div className="flex justify-between gap-3">{step > 1 ? <Button type="button" variant="outline" onClick={() => setStep((current) => current - 1)}>Back</Button> : <span />}{step < 3 ? <Button type="button" onClick={advance}>Continue <ChevronRight /></Button> : <Button type="submit" disabled={create.isPending || saveAttributes.isPending}>{create.isPending || saveAttributes.isPending ? <><LoaderCircle className="animate-spin" />Saving draft…</> : "Save draft"}</Button>}</div></form>;
+  const form = useForm<Values>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      categoryId: "",
+      title: "",
+      description: "",
+      item_condition: "USED",
+      seller_sku: "",
+    },
+  });
+  const [step, setStep] = useState<"category" | "details">("category");
+  const [parentId, setParentId] = useState<string | null>(null);
+  const [created, setCreated] = useState<CreatedDraft>();
+  const categories = useCategories(parentId);
+  const create = useCreateCatalogueItem();
+  const categoryId = form.watch("categoryId");
+  const selected = categories.data?.find(
+    (category) => category.category_id === categoryId,
+  );
+  const submit = form.handleSubmit(async (input) => {
+    if (!selected) return;
+    try {
+      const result = await create.mutateAsync({
+        category_key: selected.category_key,
+        title: input.title,
+        description: input.description,
+        item_condition: input.item_condition as ItemCondition,
+        seller_sku: input.seller_sku || null,
+        representation_metadata: {},
+      });
+      setCreated({
+        itemId: result.item_id,
+        versionId: result.draft.version_id,
+      });
+    } catch {
+      /* input remains in place for an explicit retry */
+    }
+  });
+  const error =
+    create.error instanceof ApiError
+      ? create.error.message
+      : create.error
+        ? "We could not create this draft. Your details are still here."
+        : null;
+  if (created) return <DraftSetup draft={created} />;
+  return (
+    <form onSubmit={submit} noValidate className="space-y-6">
+      <ol
+        className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-muted-foreground"
+        aria-label="Creation steps"
+      >
+        <li className={step === "category" ? "text-primary" : ""}>
+          1. Category
+        </li>
+        <li className={step === "details" ? "text-primary" : ""}>
+          2. Item details
+        </li>
+        <li>3. Specifications and options</li>
+      </ol>
+      {step === "category" ? (
+        <section className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Start with one of the two main categories, then choose its specific
+            item category.
+          </p>
+          {parentId && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setParentId(null);
+                form.setValue("categoryId", "");
+              }}
+            >
+              ← Main categories
+            </Button>
+          )}
+          {categories.isPending ? (
+            <p className="text-sm text-muted-foreground">Loading categories…</p>
+          ) : categories.error ? (
+            <p role="alert" className="text-sm text-destructive">
+              Categories could not be loaded. Try again.
+            </p>
+          ) : (
+            <div className="grid gap-2 sm:grid-cols-2">
+              {categories.data?.map((category) => (
+                <button
+                  type="button"
+                  key={category.category_id}
+                  onClick={() => {
+                    if (parentId)
+                      form.setValue("categoryId", category.category_id, {
+                        shouldValidate: true,
+                      });
+                    else setParentId(category.category_id);
+                  }}
+                  className={`rounded-lg border p-4 text-left text-sm transition ${categoryId === category.category_id ? "border-primary bg-primary/5" : "border-border hover:bg-surface"}`}
+                >
+                  <span className="font-semibold">{category.display_name}</span>
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {parentId ? "Select this category" : "View categories"}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          {categoryId && (
+            <p className="text-sm text-muted-foreground">
+              Selected:{" "}
+              <strong className="text-foreground">
+                {selected?.display_name}
+              </strong>
+            </p>
+          )}
+          {form.formState.errors.categoryId && (
+            <p className="text-sm text-destructive">
+              {form.formState.errors.categoryId.message}
+            </p>
+          )}
+        </section>
+      ) : (
+        <section className="grid gap-5">
+          <div>
+            <label className="text-sm font-semibold" htmlFor="catalogue-title">
+              Item title
+            </label>
+            <Input
+              id="catalogue-title"
+              className="mt-2"
+              {...form.register("title")}
+            />
+            {form.formState.errors.title && (
+              <p className="mt-1 text-sm text-destructive">
+                {form.formState.errors.title.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label
+              className="text-sm font-semibold"
+              htmlFor="catalogue-description"
+            >
+              Description
+            </label>
+            <textarea
+              id="catalogue-description"
+              rows={5}
+              className="mt-2 flex w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+              {...form.register("description")}
+            />
+            {form.formState.errors.description && (
+              <p className="mt-1 text-sm text-destructive">
+                {form.formState.errors.description.message}
+              </p>
+            )}
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label
+                className="text-sm font-semibold"
+                htmlFor="catalogue-condition"
+              >
+                Condition
+              </label>
+              <select
+                id="catalogue-condition"
+                className="mt-2 flex h-11 w-full rounded-lg border border-input bg-background px-3 text-sm"
+                {...form.register("item_condition")}
+              >
+                <option value="NEW">New</option>
+                <option value="USED">Used</option>
+                <option value="REFURBISHED">Refurbished</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-semibold" htmlFor="catalogue-sku">
+                Seller SKU{" "}
+                <span className="font-normal text-muted-foreground">
+                  (optional)
+                </span>
+              </label>
+              <Input
+                id="catalogue-sku"
+                className="mt-2"
+                {...form.register("seller_sku")}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+      {error && (
+        <p
+          role="alert"
+          className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm"
+        >
+          {error}
+        </p>
+      )}
+      <div className="flex justify-between gap-3">
+        {step === "details" ? (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setStep("category")}
+          >
+            Back
+          </Button>
+        ) : (
+          <span />
+        )}
+        {step === "category" ? (
+          <Button
+            type="button"
+            onClick={async () => {
+              if (await form.trigger("categoryId")) setStep("details");
+            }}
+          >
+            Continue <ChevronRight />
+          </Button>
+        ) : (
+          <Button type="submit" disabled={create.isPending}>
+            {create.isPending ? (
+              <>
+                <LoaderCircle className="animate-spin" />
+                Creating draft…
+              </>
+            ) : (
+              "Create draft and continue"
+            )}
+          </Button>
+        )}
+      </div>
+    </form>
+  );
 }

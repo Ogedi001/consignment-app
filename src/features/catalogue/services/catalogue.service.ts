@@ -1,22 +1,230 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/shared/lib";
-import type { ApiEnvelope, AttributeDefinition, AttributeInput, CatalogueItem, Category, CreateItemInput, Draft, DraftUpdateInput, ExactItemVersion, VersionHistory } from "../types/catalogue.types";
+import type {
+  ApiEnvelope,
+  AttributeDefinition,
+  AttributeInput,
+  CatalogueItem,
+  Category,
+  CreateItemInput,
+  Draft,
+  DraftUpdateInput,
+  ExactItemVersion,
+  VersionHistory,
+} from "../types/catalogue.types";
 
-export const catalogueKeys = { all: ["catalogue"] as const, categories: (parentId?: string | null) => [...catalogueKeys.all, "categories", parentId ?? "root"] as const, attributes: (id: string) => [...catalogueKeys.all, "attributes", id] as const, items: (filters = "") => [...catalogueKeys.all, "items", filters] as const, item: (id: string) => [...catalogueKeys.all, "item", id] as const, version: (itemId: string, versionId: string) => [...catalogueKeys.item(itemId), "version", versionId] as const, history: (id: string) => [...catalogueKeys.item(id), "history"] as const };
-async function read<T>(path: string) { return (await api<ApiEnvelope<T>>(path)).data; }
-const idempotencyKey = () => typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `catalogue-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-const headers = (aggregateVersion: number) => ({ "Idempotency-Key": idempotencyKey(), "If-Match": `"${aggregateVersion}"` });
-const refresh = (client: ReturnType<typeof useQueryClient>, itemId: string) => Promise.all([client.invalidateQueries({ queryKey: catalogueKeys.item(itemId) }), client.invalidateQueries({ queryKey: catalogueKeys.history(itemId) }), client.invalidateQueries({ queryKey: catalogueKeys.items() })]);
+export const catalogueKeys = {
+  all: ["catalogue"] as const,
+  categories: (parentId?: string | null) =>
+    [...catalogueKeys.all, "categories", parentId ?? "root"] as const,
+  attributes: (id: string) => [...catalogueKeys.all, "attributes", id] as const,
+  items: (filters = "") => [...catalogueKeys.all, "items", filters] as const,
+  item: (id: string) => [...catalogueKeys.all, "item", id] as const,
+  version: (itemId: string, versionId: string) =>
+    [...catalogueKeys.item(itemId), "version", versionId] as const,
+  history: (id: string) => [...catalogueKeys.item(id), "history"] as const,
+};
+async function read<T>(path: string) {
+  return (await api<ApiEnvelope<T>>(path)).data;
+}
+const idempotencyKey = () =>
+  typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID()
+    : `catalogue-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+const headers = (aggregateVersion: number) => ({
+  "Idempotency-Key": idempotencyKey(),
+  "If-Match": `"${aggregateVersion}"`,
+});
+const refresh = (client: ReturnType<typeof useQueryClient>, itemId: string) =>
+  Promise.all([
+    client.invalidateQueries({ queryKey: catalogueKeys.item(itemId) }),
+    client.invalidateQueries({ queryKey: catalogueKeys.history(itemId) }),
+    client.invalidateQueries({ queryKey: catalogueKeys.items() }),
+  ]);
 
-export function useCategories(parentId?: string | null) { const query = parentId ? `?parent_category_id=${encodeURIComponent(parentId)}` : ""; return useQuery({ queryKey: catalogueKeys.categories(parentId), queryFn: () => read<{ categories: Category[] }>(`/api/catalog/categories${query}`), select: (data) => data.categories }); }
-export function useCategoryAttributes(categoryId?: string | null) { return useQuery({ queryKey: catalogueKeys.attributes(categoryId ?? ""), enabled: Boolean(categoryId), queryFn: () => read<{ attributes: AttributeDefinition[] }>(`/api/catalog/categories/${categoryId}/attributes`), select: (data) => [...data.attributes].sort((a, b) => a.display_order - b.display_order) }); }
-export function useCatalogueItems(filters?: { categoryKey?: string; limit?: number }) { const params = new URLSearchParams(); if (filters?.categoryKey) params.set("category_key", filters.categoryKey); if (filters?.limit) params.set("limit", String(filters.limit)); const text = params.toString(); return useQuery({ queryKey: catalogueKeys.items(text), queryFn: () => read<{ items: CatalogueItem[]; next_cursor: string | null }>(`/api/catalog/items${text ? `?${text}` : ""}`) }); }
-export function useCatalogueItem(itemId: string) { return useQuery({ queryKey: catalogueKeys.item(itemId), queryFn: () => read<CatalogueItem>(`/api/catalog/items/${itemId}`), enabled: Boolean(itemId) }); }
-export function useCatalogueVersion(itemId: string, versionId?: string) { return useQuery({ queryKey: catalogueKeys.version(itemId, versionId ?? ""), queryFn: () => read<ExactItemVersion>(`/api/catalog/items/${itemId}/versions/${versionId}`), enabled: Boolean(itemId && versionId) }); }
-export function useVersionHistory(itemId: string) { return useQuery({ queryKey: catalogueKeys.history(itemId), queryFn: () => read<VersionHistory>(`/api/catalog/items/${itemId}/versions`), enabled: Boolean(itemId) }); }
-export function useCreateCatalogueItem() { const client = useQueryClient(); return useMutation({ mutationFn: (input: CreateItemInput) => api<ApiEnvelope<{ item_id: string; aggregate_version: number; draft: Draft }>>("/api/catalog/items", { method: "POST", body: input, headers: { "Idempotency-Key": idempotencyKey() } }).then((response) => response.data), onSuccess: () => client.invalidateQueries({ queryKey: catalogueKeys.items() }) }); }
-export function useSaveAttributes(itemId: string, versionId: string) { const client = useQueryClient(); return useMutation({ mutationFn: ({ attributes, aggregateVersion }: { attributes: AttributeInput[]; aggregateVersion: number }) => api<ApiEnvelope<{ item_id: string; aggregate_version: number; draft: Draft }>>(`/api/catalog/items/${itemId}/drafts/${versionId}/attributes`, { method: "PUT", body: { attributes }, headers: headers(aggregateVersion) }).then((r) => r.data), onSuccess: async (data) => { client.setQueryData(catalogueKeys.version(itemId, versionId), data.draft); await refresh(client, itemId); } }); }
-export function useUpdateDraft(itemId: string, versionId: string) { const client = useQueryClient(); return useMutation({ mutationFn: ({ input, aggregateVersion }: { input: DraftUpdateInput; aggregateVersion: number }) => api<ApiEnvelope<{ item_id: string; aggregate_version: number; draft: Draft }>>(`/api/catalog/items/${itemId}/drafts/${versionId}`, { method: "PATCH", body: input, headers: headers(aggregateVersion) }).then((r) => r.data), onSuccess: async (data) => { client.setQueryData(catalogueKeys.version(itemId, versionId), data.draft); await refresh(client, itemId); } }); }
-export function usePublishDraft(itemId: string, versionId: string) { const client = useQueryClient(); return useMutation({ mutationFn: (aggregateVersion: number) => api<ApiEnvelope<unknown>>(`/api/catalog/items/${itemId}/versions/${versionId}/publish`, { method: "POST", body: {}, headers: headers(aggregateVersion) }), onSuccess: () => refresh(client, itemId) }); }
-export function useCreateNextDraft(itemId: string) { const client = useQueryClient(); return useMutation({ mutationFn: ({ sourceVersionId, aggregateVersion }: { sourceVersionId: string; aggregateVersion: number }) => api<ApiEnvelope<{ draft: { version_id: string } }>>(`/api/catalog/items/${itemId}/versions`, { method: "POST", body: { source_version_id: sourceVersionId }, headers: headers(aggregateVersion) }).then((r) => r.data), onSuccess: () => refresh(client, itemId) }); }
-export function useItemLifecycle(itemId: string, action: "archive" | "restore") { const client = useQueryClient(); return useMutation({ mutationFn: (aggregateVersion: number) => api<ApiEnvelope<unknown>>(`/api/catalog/items/${itemId}/${action}`, { method: "POST", headers: headers(aggregateVersion) }), onSuccess: () => refresh(client, itemId) }); }
+export function useCategories(parentId?: string | null) {
+  const query = parentId
+    ? `?parent_category_id=${encodeURIComponent(parentId)}`
+    : "";
+  return useQuery({
+    queryKey: catalogueKeys.categories(parentId),
+    queryFn: () =>
+      read<{ categories: Category[] }>(`/api/catalog/categories${query}`),
+    select: (data) =>
+      data.categories.filter(
+        (category) => category.parent_category_id === (parentId ?? null),
+      ),
+  });
+}
+export function useCategoryAttributes(categoryId?: string | null) {
+  return useQuery({
+    queryKey: catalogueKeys.attributes(categoryId ?? ""),
+    enabled: Boolean(categoryId),
+    queryFn: () =>
+      read<{ attributes: AttributeDefinition[] }>(
+        `/api/catalog/categories/${categoryId}/attributes`,
+      ),
+    select: (data) =>
+      [...data.attributes].sort((a, b) => a.display_order - b.display_order),
+  });
+}
+export function useCatalogueItems(filters?: {
+  categoryKey?: string;
+  limit?: number;
+}) {
+  const params = new URLSearchParams();
+  if (filters?.categoryKey) params.set("category_key", filters.categoryKey);
+  if (filters?.limit) params.set("limit", String(filters.limit));
+  const text = params.toString();
+  return useQuery({
+    queryKey: catalogueKeys.items(text),
+    queryFn: () =>
+      read<{ items: CatalogueItem[]; next_cursor: string | null }>(
+        `/api/catalog/items${text ? `?${text}` : ""}`,
+      ),
+  });
+}
+export function useCatalogueItem(itemId: string) {
+  return useQuery({
+    queryKey: catalogueKeys.item(itemId),
+    queryFn: () => read<CatalogueItem>(`/api/catalog/items/${itemId}`),
+    enabled: Boolean(itemId),
+  });
+}
+export function useCatalogueVersion(itemId: string, versionId?: string) {
+  return useQuery({
+    queryKey: catalogueKeys.version(itemId, versionId ?? ""),
+    queryFn: () =>
+      read<ExactItemVersion>(
+        `/api/catalog/items/${itemId}/versions/${versionId}`,
+      ),
+    enabled: Boolean(itemId && versionId),
+  });
+}
+export function useVersionHistory(itemId: string) {
+  return useQuery({
+    queryKey: catalogueKeys.history(itemId),
+    queryFn: () =>
+      read<VersionHistory>(`/api/catalog/items/${itemId}/versions`),
+    enabled: Boolean(itemId),
+  });
+}
+export function useCreateCatalogueItem() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateItemInput) =>
+      api<
+        ApiEnvelope<{
+          item_id: string;
+          aggregate_version: number;
+          draft: Draft;
+        }>
+      >("/api/catalog/items", {
+        method: "POST",
+        body: input,
+        headers: { "Idempotency-Key": idempotencyKey() },
+      }).then((response) => response.data),
+    onSuccess: () =>
+      client.invalidateQueries({ queryKey: catalogueKeys.items() }),
+  });
+}
+export function useSaveAttributes(itemId: string, versionId: string) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      attributes,
+      aggregateVersion,
+    }: {
+      attributes: AttributeInput[];
+      aggregateVersion: number;
+    }) =>
+      api<
+        ApiEnvelope<{
+          item_id: string;
+          aggregate_version: number;
+          draft: Draft;
+        }>
+      >(`/api/catalog/items/${itemId}/drafts/${versionId}/attributes`, {
+        method: "PUT",
+        body: { attributes },
+        headers: headers(aggregateVersion),
+      }).then((r) => r.data),
+    onSuccess: async (data) => {
+      client.setQueryData(catalogueKeys.version(itemId, versionId), data.draft);
+      await refresh(client, itemId);
+    },
+  });
+}
+export function useUpdateDraft(itemId: string, versionId: string) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      input,
+      aggregateVersion,
+    }: {
+      input: DraftUpdateInput;
+      aggregateVersion: number;
+    }) =>
+      api<
+        ApiEnvelope<{
+          item_id: string;
+          aggregate_version: number;
+          draft: Draft;
+        }>
+      >(`/api/catalog/items/${itemId}/drafts/${versionId}`, {
+        method: "PATCH",
+        body: input,
+        headers: headers(aggregateVersion),
+      }).then((r) => r.data),
+    onSuccess: async (data) => {
+      client.setQueryData(catalogueKeys.version(itemId, versionId), data.draft);
+      await refresh(client, itemId);
+    },
+  });
+}
+export function usePublishDraft(itemId: string, versionId: string) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (aggregateVersion: number) =>
+      api<ApiEnvelope<unknown>>(
+        `/api/catalog/items/${itemId}/versions/${versionId}/publish`,
+        { method: "POST", body: {}, headers: headers(aggregateVersion) },
+      ),
+    onSuccess: () => refresh(client, itemId),
+  });
+}
+export function useCreateNextDraft(itemId: string) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      sourceVersionId,
+      aggregateVersion,
+    }: {
+      sourceVersionId: string;
+      aggregateVersion: number;
+    }) =>
+      api<ApiEnvelope<{ draft: { version_id: string } }>>(
+        `/api/catalog/items/${itemId}/versions`,
+        {
+          method: "POST",
+          body: { source_version_id: sourceVersionId },
+          headers: headers(aggregateVersion),
+        },
+      ).then((r) => r.data),
+    onSuccess: () => refresh(client, itemId),
+  });
+}
+export function useItemLifecycle(
+  itemId: string,
+  action: "archive" | "restore",
+) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (aggregateVersion: number) =>
+      api<ApiEnvelope<unknown>>(`/api/catalog/items/${itemId}/${action}`, {
+        method: "POST",
+        headers: headers(aggregateVersion),
+      }),
+    onSuccess: () => refresh(client, itemId),
+  });
+}
